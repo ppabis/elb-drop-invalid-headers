@@ -23,6 +23,11 @@ resource "aws_alb" "sample" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_security_group.id]
   subnets            = values(module.vpc.public_subnet_attributes_by_az)[*].id
+  drop_invalid_header_fields = true
+  access_logs {
+    bucket  = aws_s3_bucket.logs_bucket.bucket
+    enabled = false
+  }
 }
 
 resource "aws_alb_listener" "listener" {
