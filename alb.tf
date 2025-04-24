@@ -18,12 +18,12 @@ resource "aws_security_group" "alb_security_group" {
 }
 
 resource "aws_alb" "sample" {
-  name               = "sample-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_security_group.id]
-  subnets            = values(module.vpc.public_subnet_attributes_by_az)[*].id
-  drop_invalid_header_fields = true
+  name                       = "sample-alb"
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.alb_security_group.id]
+  subnets                    = values(module.vpc.public_subnet_attributes_by_az)[*].id
+  drop_invalid_header_fields = false
   access_logs {
     bucket  = aws_s3_bucket.logs_bucket.bucket
     enabled = false
@@ -36,12 +36,8 @@ resource "aws_alb_listener" "listener" {
   protocol          = "HTTP"
 
   default_action {
-    type = "fixed-response"
-    fixed_response {
-      content_type = "text/html"
-      message_body = "<html><body><h3>Fixed response!</h3></body></html>"
-      status_code  = "200"
-    }
+    type = "forward"
+    target_group_arn = aws_lb_target_group.lambda_tg.arn
   }
 }
 
