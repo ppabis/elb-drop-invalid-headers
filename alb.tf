@@ -36,7 +36,7 @@ resource "aws_alb_listener" "listener" {
   protocol          = "HTTP"
 
   default_action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.lambda_tg.arn
   }
 }
