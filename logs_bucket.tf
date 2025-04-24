@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "logs_bucket" {
-  bucket = var.logs_bucket_name
+  bucket        = var.logs_bucket_name
+  force_destroy = true
 }
 
 locals {
