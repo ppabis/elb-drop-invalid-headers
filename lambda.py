@@ -36,20 +36,20 @@ def text_format(headers):
 
 """
 This function will simply print the headers it received.
-If ?format=text is present, it will print the headers in text format to use
-with curl. Otherwise, it is a nice HTML page.
+If ?format=html is present, it will print the headers in HTML format.
+Otherwise, it is a just a text page.
 """
 def lambda_handler(event, context):
     headers = event.get('headers', {})
 
     # Check if format query parameter is present
     query_params = event.get('queryStringParameters', {}) or {}
-    if query_params.get('format') == 'text':
-        content_type = 'text/plain'
-        body = text_format(headers)
-    else:
+    if query_params.get('format') == 'html':
         content_type = 'text/html'
         body = html_format(headers)
+    else:
+        content_type = 'text/plain'
+        body = text_format(headers)
     
     return {
         'statusCode': 200,
